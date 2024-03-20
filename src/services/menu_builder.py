@@ -29,12 +29,16 @@ class MenuBuilder:
     def get_main_menu(self, restriction=None) -> List[Dict]:
         restriced_dishes = []
 
-        if restriction is None:
-            return [dish.to_dict() for dish in self.menu_data.dishes]
-
         for dish in self.menu_data.dishes:
-            if restriction in dish.restrictions:
-                continue
-            restriced_dishes.append(dish.to_dict())
+            if restriction is None or \
+                    restriction not in dish.get_restrictions():
+                dish_info = {
+                    "dish_name": dish.name,
+                    "ingredients": dish.get_ingredients(),
+                    "price": dish.price,
+                    "restrictions": list(dish.get_restrictions())
+                }
+
+                restriced_dishes.append(dish_info)
 
         return restriced_dishes
